@@ -1,0 +1,49 @@
+{
+  "name": "server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/src/index.js",
+    "start:dev": "tsx src/index.ts",
+    "start:prod": "node dist/src/index.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "mcp:smoke": "tsx scripts/mcp-smoke.ts",
+    "mcp:stdio": "tsx src/mcp-stdio.ts",
+    "mcp:stdio:prod": "node dist/src/mcp-stdio.js",
+    "mcp:stdio:smoke": "tsx scripts/mcp-stdio-smoke.ts",
+    "backup": "tsx scripts/backup.ts",
+    "restore": "tsx scripts/restore.ts",
+    "ws:smoke": "tsx scripts/ws-smoke.ts",
+    "auth:smoke": "tsx scripts/auth-smoke.ts",
+    "seed:demo": "tsx scripts/seed-demo.ts",
+    "user:create": "tsx scripts/user.ts create",
+    "user:list": "tsx scripts/user.ts list",
+    "user:password": "tsx scripts/user.ts password",
+    "user:token": "tsx scripts/user.ts token",
+    "user:enable": "tsx scripts/user.ts enable",
+    "user:disable": "tsx scripts/user.ts disable"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/express": "^2.0.2",
+    "@modelcontextprotocol/node": "^2.1.2",
+    "@modelcontextprotocol/server": "^2.4.0",
+    "express": "^5.3.0",
+    "ws": "^8.22.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.4.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.9",
+    "@types/ws": "^8.18.2",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

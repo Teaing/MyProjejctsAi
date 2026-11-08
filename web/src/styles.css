@@ -1,0 +1,229 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+  --surface-page: #f8fafc;
+  --surface-card: #ffffff;
+  --surface-subtle: #f1f5f9;
+  --text-primary: #1d293d;
+  --text-secondary: #45556c;
+  --text-muted: #62748e;
+  --border-default: #cad5e2;
+  --focus-ring: #155dfc;
+  --status-not-started: #45556c;
+  --status-not-started-soft: #e2e8f0;
+  --status-in-progress: #1447e6;
+  --status-in-progress-soft: #dbeafe;
+  --status-completed: #007a55;
+  --status-completed-soft: #d1fae5;
+  --status-abandoned: #45556c;
+  --status-abandoned-soft: #f1f5f9;
+  --status-warning: #bb4d00;
+  --status-warning-soft: #fef3c6;
+  --status-overdue: #c70036;
+  --status-overdue-soft: #ffe4e6;
+  --marker-today: #7c3aed;
+}
+
+body {
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  background-color: var(--surface-page);
+  color: var(--text-secondary);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+select,
+input {
+  cursor: pointer;
+}
+
+input[type='text'],
+input[type='date'] {
+  cursor: text;
+}
+
+:where(button, select, input, [role='button']):focus-visible {
+  outline: 3px solid #93c5fd;
+  outline: 3px solid color-mix(in srgb, var(--focus-ring) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.filter-tab {
+  color: var(--text-muted);
+}
+
+.filter-tab.is-active {
+  color: var(--text-primary);
+  background: var(--surface-card);
+  box-shadow: 0 1px 2px rgb(15 23 43 / 8%);
+}
+
+.filter-tab.is-active[data-status='IN_PROGRESS'] {
+  color: var(--status-in-progress);
+}
+
+.filter-tab.is-active[data-status='COMPLETED'] {
+  color: var(--status-completed);
+}
+
+.filter-tab.is-active[data-status='ABANDONED'] {
+  color: var(--status-abandoned);
+}
+
+.status-chip,
+.warning-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-chip[data-status='NOT_STARTED'] {
+  color: var(--status-not-started);
+  background: var(--status-not-started-soft);
+  border-color: #cad5e2;
+}
+
+.status-chip[data-status='IN_PROGRESS'] {
+  color: var(--status-in-progress);
+  background: var(--status-in-progress-soft);
+  border-color: #bedbff;
+}
+
+.status-chip[data-status='COMPLETED'] {
+  color: var(--status-completed);
+  background: var(--status-completed-soft);
+  border-color: #a7f3d0;
+}
+
+.status-chip[data-status='ABANDONED'] {
+  color: var(--status-abandoned);
+  background: var(--status-abandoned-soft);
+  border-color: #cad5e2;
+  text-decoration: line-through;
+}
+
+.status-select[data-status='NOT_STARTED'] {
+  color: var(--status-not-started);
+}
+
+.status-select[data-status='IN_PROGRESS'] {
+  color: var(--status-in-progress);
+}
+
+.status-select[data-status='COMPLETED'] {
+  color: var(--status-completed);
+}
+
+.status-select[data-status='ABANDONED'] {
+  color: var(--status-abandoned);
+}
+
+.status-swatch {
+  width: 0.55rem;
+  height: 0.55rem;
+  flex: none;
+  border-radius: 999px;
+  background: var(--status-not-started);
+}
+
+.status-swatch[data-status='IN_PROGRESS'],
+.status-bar[data-status='IN_PROGRESS'] {
+  background-color: var(--status-in-progress);
+}
+
+.status-swatch[data-status='COMPLETED'],
+.status-bar[data-status='COMPLETED'] {
+  background-color: var(--status-completed);
+}
+
+.status-swatch[data-status='ABANDONED'] {
+  border: 1px solid var(--status-abandoned);
+  background: transparent;
+}
+
+.status-bar[data-status='NOT_STARTED'] {
+  background-color: var(--status-not-started);
+}
+
+.status-bar[data-status='ABANDONED'] {
+  background-color: var(--status-abandoned);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0,
+    transparent 4px,
+    rgb(255 255 255 / 42%) 4px,
+    rgb(255 255 255 / 42%) 7px
+  );
+}
+
+.status-bar[data-warning='NOT_STARTED_OVERDUE'],
+.status-swatch[data-warning='NOT_STARTED_OVERDUE'] {
+  background-color: var(--status-warning);
+}
+
+.status-bar[data-warning='IN_PROGRESS_OVERDUE'],
+.status-swatch[data-warning='IN_PROGRESS_OVERDUE'] {
+  background-color: var(--status-overdue);
+}
+
+.warning-badge[data-warning='NOT_STARTED_OVERDUE'] {
+  color: var(--status-warning);
+  background: var(--status-warning-soft);
+  border-color: #fcd34d;
+}
+
+.warning-badge[data-warning='IN_PROGRESS_OVERDUE'] {
+  color: var(--status-overdue);
+  background: var(--status-overdue-soft);
+  border-color: #fda4af;
+}
+
+.system-card[data-warning='NOT_STARTED_OVERDUE'] {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 1px rgb(245 158 11 / 18%);
+}
+
+.system-card[data-warning='IN_PROGRESS_OVERDUE'],
+.system-card.system-card--child-warning {
+  border-color: #fb7185;
+  box-shadow: 0 0 0 1px rgb(251 113 133 / 18%);
+}
+
+.system-card--hidden {
+  background: var(--surface-subtle);
+  border-style: dashed;
+}
+
+.today-marker {
+  border-color: #8b5cf6;
+  border-color: color-mix(in srgb, var(--marker-today) 65%, transparent);
+}
+
+.today-label {
+  color: white;
+  background: var(--marker-today);
+}
+
+.drag-ghost {
+  opacity: 0.4;
+  background: #e2e8f0;
+  border: 2px dashed var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
