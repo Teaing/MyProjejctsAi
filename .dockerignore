@@ -1,0 +1,16 @@
+.git
+.gitignore
+.claude
+node_modules
+**/node_modules
+dist
+**/dist
+server/data
+**/*.db
+**/*.db-wal
+**/*.db-shm
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store

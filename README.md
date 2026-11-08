@@ -41,6 +41,63 @@ npm start
 
 打开 `http://127.0.0.1:3000`。
 
+## Docker 部署
+
+需要 Docker Engine / Docker Desktop 和 Compose v2。
+
+```bash
+cp .env.example .env
+# 编辑 .env，至少修改 ADMIN_PASSWORD
+docker compose up -d --build
+```
+
+打开 `http://127.0.0.1:3000`。首次启动时会根据 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 创建管理员；用户表已有数据后这两个变量不再生效。
+
+常用命令：
+
+```bash
+docker compose logs -f
+docker compose ps
+docker compose down          # 停止并删除容器，保留数据卷
+docker compose down -v       # 连数据卷一起删除（谨慎）
+```
+
+- 端口默认只绑定 `127.0.0.1`，不会直接暴露到局域网
+- 数据保存在命名卷 `project-gantt-data`（容器内 `/app/server/data`）
+- 健康检查访问 `/api/health`
+- 镜像内使用编译后的 `server/dist` 与 `web/dist`，运行时不依赖 `tsx`
+
+容器内执行管理命令：
+
+```bash
+# 演示数据（会清空项目、审计和会话，保留用户）
+docker compose exec app node server/dist/scripts/seed-demo.js --yes
+
+# 用户与 Token
+docker compose exec app node server/dist/scripts/user.js list
+docker compose exec app node server/dist/scripts/user.js create \
+  --username mcp-agent --password '至少8位密码' --role ADMIN
+docker compose exec app node server/dist/scripts/user.js token --username mcp-agent
+
+# 备份
+docker compose exec app node server/dist/scripts/backup.js
+
+# 恢复（必须先停止服务）
+docker compose stop
+docker compose run --rm app node server/dist/scripts/restore.js \
+  /app/server/data/backups/<backup-file>.db --yes
+docker compose start
+```
+
+如果本机 3000 端口已被占用（例如本地 `npm start` 正在运行），请修改 `.env` 里的 `APP_PORT`，或先停止本地服务。
+
+远程或局域网访问时：
+
+- 将 `docker-compose.yml` 的端口映射改为 `"${APP_PORT:-3000}:3000"`（或仅绑定内网地址）
+- 在 `.env` 中把 `ALLOWED_HOSTS` 改成实际访问的域名/IP
+- 通过 HTTPS 反向代理时设置 `COOKIE_SECURE=true`
+- 不要在没有 TLS 的情况下直接暴露到公网
+
 ### 演示数据
 
 ```bash
@@ -182,6 +239,10 @@ SMOKE_USERNAME=admin SMOKE_PASSWORD='...' npm run ws:smoke -w server
 │   └── data/           # 运行时数据库（不提交）
 ├── web/
 │   └── src/            # Vue 3 前端
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+├── .env.example
 ├── AGENTS.md           # MCP Agent 契约
 └── README.md
 ```
