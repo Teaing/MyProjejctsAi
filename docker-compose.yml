@@ -19,6 +19,8 @@ services:
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
     volumes:
       - project-data:/app/server/data
+      # 需要直接在宿主机备份时，可改用绑定挂载（目录需对 uid 1000 可写）：
+      # - ./docker-data:/app/server/data
     healthcheck:
       test:
         [

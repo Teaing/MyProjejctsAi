@@ -67,6 +67,29 @@ docker compose down -v       # 连数据卷一起删除（谨慎）
 - 健康检查访问 `/api/health`
 - 镜像内使用编译后的 `server/dist` 与 `web/dist`，运行时不依赖 `tsx`
 
+### 数据持久化
+
+数据库、用户、Token 和备份都位于命名卷 `project-gantt-data` 中：
+
+- 重启容器、重建镜像、执行 `docker compose down` 后再 `up`，数据都会保留
+- 只有 `docker compose down -v` 或手动删除卷才会清空数据
+- `restart: unless-stopped` 会在 Docker 或主机重启后自动拉起容器
+
+命名卷本身不是备份：如果数据重要，请定期把卷内 `/app/server/data/backups` 复制到宿主机或其他存储。也可以改用宿主机目录挂载，便于直接备份：
+
+```yaml
+volumes:
+  - ./docker-data:/app/server/data
+```
+
+使用绑定挂载时，宿主机目录必须对容器内 `node` 用户（uid 1000）可写，例如：
+
+```bash
+mkdir -p docker-data && sudo chown -R 1000:1000 docker-data
+```
+
+首次启动后 `.env` 里的管理员环境变量只在用户表为空时生效；之后账号数据都在数据库卷中，与 `.env` 无关。
+
 容器内执行管理命令：
 
 ```bash
