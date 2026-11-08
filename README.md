@@ -86,7 +86,16 @@ npm run user:enable -w server -- --username alice
 Authorization: Bearer <API_TOKEN>
 ```
 
-Token 通过 `npm run user:token -w server -- --username <name>` 生成，只显示一次。只读用户的 Token 只能读取资源，不会注册任何写工具。
+Token 通过 `npm run user:token -w server -- --username <name>` 生成，只显示一次。
+
+如果 Agent 需要增删改项目，请创建一个 **ADMIN** 账号并签发 Token（建议与人类管理员分开，便于审计区分）：
+
+```bash
+npm run user:create -w server -- --username mcp-agent --password '至少8位密码' --role ADMIN
+npm run user:token -w server -- --username mcp-agent
+```
+
+只读 Agent 则使用 `READONLY` 账号的 Token：它只能读取资源，不会注册任何写工具。
 
 ### stdio（推荐本地 Agent）
 
